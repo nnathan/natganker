@@ -97,8 +97,8 @@ function discover_routing_table_ids
     aws ec2 describe-route-tables                                     \
         --filters Name=route.destination-cidr-block,Values=0.0.0.0/0, \
                   Name=route.instance-id,Values=$1                    \
-        --output text                                                 \
-        | awk '/^ROUTETABLES/ {print $2}' | grep '^rtb'
+        --output json                                                 \
+        | jq .RouteTables | jq -r .[].RouteTableId
 }
 
 # usage: replace_default_routes <instance-id> <routing-table-id> ...
@@ -228,7 +228,7 @@ function takeover
 
     # log all routing tables that belong to this instance
     log "[verify route tables that default to $my_instance_id]"
-    routing_tables=$(discover_routing_table_ids $my_instance_id)
+    routing_tables="$(discover_routing_table_ids $my_instance_id)"
     for rtable in $routing_tables
     do
         log "  - $rtable defaults to $my_instance_id"
