@@ -23,9 +23,9 @@ function log
     if [ $interactive_mode -eq 1 ]
     then
         echo "$1" >&2
-    else
-        logger -t $script_name -- $1;
     fi
+
+    logger -t $script_name -- $1
 }
 
 function die
