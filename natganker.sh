@@ -126,6 +126,7 @@ function replace_default_routes
 
 log "starting $0"
 
+type jq >/dev/null 2>&1 || die "missing jq, run: yum install jq"
 [ "x$1" = x -o "x$2" = x ] && die "$usage"
 
 partner_instance_id="$1"
