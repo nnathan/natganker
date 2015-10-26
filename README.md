@@ -58,7 +58,7 @@ Created with Monodraw
     - Primary: actively forwards traffic and is associated with an elastic IP.
     - Secondary: runs natganker to passively monitor the primary instance and takeover if a healthcheck fails.
 
-* Both gateways must be able to perform healthchecks over the internal IP, this usually requires ping or SSH among the NAT gateway nodes over the internal IP.
+* Both gateways must be able to perform healthchecks over the internal IP. This is easily solved by allowing ping or SSH to/from the internal subnet which both NAT gateways reside.
 
 * The primary NAT gateway instance should be the default route for routing tables in the region.
 
