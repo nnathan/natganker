@@ -75,6 +75,8 @@ Created with Monodraw
 
 ## Usage
 
+There are three ways to run natganker:
+
 1. Run on secondary NAT gateway and perform ping health check:
     - `./natganker.sh <primary-nat-instance-id> <primary-nat-elastic-ip>`
 
@@ -85,3 +87,15 @@ Created with Monodraw
     - `./natganker.sh <primary-nat-instance-id> <primary-nat-elastic-ip> forcefail`
 
 In (1) and (2) if a healthcheck fails, then the secondary NAT will replace itself as default route for all route tables defaulting to the primary NAT gateway. The script is idempotent so it can be rerun and will perform any necessary operations until the secondary NAT has the associated elastic IP and is the default route for all associated routing tables.
+
+### Using Monit
+
+To ensure the script runs persistently you can use [monit](http://mmonit.com/).
+
+Here is an example configuration file which is placed in `/etc/monit.d/natganker`:
+
+```
+check process natganker matching bash.*natganker
+   start program = "/root/natganker/natganker.sh <primary-nat-instance-id> <primary-nat-elastic-ip>" as uid "root" and gid "root"
+   stop program = "/usr/bin/pkill -f bash.*natganker" as uid "root" and gid "root"
+```
